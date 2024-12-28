@@ -6,8 +6,61 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>A Simple Bar Chart</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+     
+    .gray{
+      /*background-color: black;*/
+    }
+    
+    </style>
   </head>
   <body>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script>
+      const dataset = [ 
+                       [31, "Jan"], 
+                       [28, "Feb"], 
+                       [31, "Mar"], 
+                       [30, "Apr"], 
+                       [31, "May"], 
+                       [30, "Jun"], 
+                       [31, "Jul"],
+                       [31, "Aug"],
+                       [30, "Sep"],
+                       [31, "Oct"],
+                       [30, "Nov"],
+                       [31, "Dec"]
+                      ];
+      const w = 500;
+      const h = 300;
+
+      const rectW = 41;
+      const svg = d3.select("body")
+           .append("svg")
+           .attr("width", w)
+           .attr("height", h)
+           .attr("class","gray");
+
+        svg.selectAll("rect")
+           .data(dataset)
+           .enter()
+           .append("rect")
+           .attr("width", 30)
+           .attr("height", (d)=>  { return d[0] * 7})
+           .attr("x", (d,i) => { return i * rectW })
+           .attr("y", (d,i) => { return h - d[0] * 7})
+           .attr("fill", "burlywood")
+
+        svg.selectAll("text")
+           .data(dataset)
+           .enter()
+           .append("text")
+           .text((d)=> d[1])
+           .attr("x", (d, i)=> i * rectW)
+           .attr("y", (d)=> h - (7 * d[0]) - 5)
+           
+    </script>
+
   </body>
 </html>
