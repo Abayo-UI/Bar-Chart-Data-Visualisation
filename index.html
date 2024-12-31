@@ -8,11 +8,9 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-     
-    .gray{
-      /*background-color: black;*/
-    }
-    
+     svg > rect:hover{
+        fill: green;
+     }
     </style>
   </head>
   <body>
@@ -20,7 +18,7 @@
     <script>
       const dataset = [ 
                        [31, "Jan"], 
-                       [28, "Feb"], 
+                       [29, "Feb"], 
                        [31, "Mar"], 
                        [30, "Apr"], 
                        [31, "May"], 
@@ -32,34 +30,64 @@
                        [30, "Nov"],
                        [31, "Dec"]
                       ];
-      const w = 500;
+      const w = 520;
       const h = 300;
-
+      const padding = 30;                            
       const rectW = 41;
+
+      const title = d3.select("body")
+                       .append("h2")
+                       .text("A Simple Bar Chart of Number of Days and Months of the year")
+                       .style("text-decoration","underline");
+            
+
       const svg = d3.select("body")
            .append("svg")
            .attr("width", w)
            .attr("height", h)
-           .attr("class","gray");
-
+           .style("margin-top","10px")
+           
+      
         svg.selectAll("rect")
            .data(dataset)
            .enter()
            .append("rect")
            .attr("width", 30)
-           .attr("height", (d)=>  { return d[0] * 7})
-           .attr("x", (d,i) => { return i * rectW })
-           .attr("y", (d,i) => { return h - d[0] * 7})
+           .attr("height", (d)=>  { return d[0] * 8.6})
+           .attr("x", (d,i) => { return (i) * rectW + padding})
+           .attr("y", (d,i) => h - d[0] * 8.6 - padding)
            .attr("fill", "burlywood")
+           .append("title")
+           .text((d)=> d[1] )
 
         svg.selectAll("text")
            .data(dataset)
            .enter()
            .append("text")
            .text((d)=> d[1])
-           .attr("x", (d, i)=> i * rectW)
-           .attr("y", (d)=> h - (7 * d[0]) - 5)
-           
+           .attr("x", (d, i)=> i * rectW  + padding)
+           .attr("y", (d)=> h - (8.5 * d[0]) - 18)
+           .style("font-family","verdana")
+           .style("fill","green")
+          
+    const xScale = d3.scaleLinear()
+                       .domain([ 0, 365 ])
+                       .range([ padding, w-padding ]);
+                      
+    const xAxis = d3.axisBottom(xScale);
+                      svg.append("g")
+                         .attr("transform",`translate(0,${h - padding})`)
+                         .call(xAxis);
+
+    const yScale = d3.scaleLinear()
+                      .domain([0, d3.max( dataset, (d) => d[0])])
+                      .range([ h - padding, 0 ])
+
+    const yAxis = d3.axisLeft(yScale);
+                  svg.append("g")
+                     .attr("transform", `translate(${padding},0)`)
+                     .call(yAxis);
+
     </script>
 
   </body>
